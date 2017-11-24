@@ -1,0 +1,39 @@
+{
+  "name": "serialport-wait",
+  "version": "0.0.1",
+  "dependencies": {
+    "serialport": ">=6.0.0",
+    "deasync": ">=0.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/audihsu/serialport-wait.git"
+  },
+  "homepage": "https://github.com/audihsu/serialport-wait",
+  "description": "synchronous wait and send through serialport",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --harmony test.js"
+  },
+  "keywords": [
+    "serialport",
+    "wait",
+    "send",
+    "synchronous"
+  ],
+  "author": {
+    "name": "Audi Hsu",
+    "email": "audihsu@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Audi Hsu",
+      "email": "audihsu@gmail.com",
+      "url": "https://github.com/audihsu"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/audihsu/serialport-wait/issues"
+  }
+}
