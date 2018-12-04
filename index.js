@@ -1,5 +1,5 @@
 var serialport_wait = function() {
-    var deasync = require('deasync');
+    var sleep = require('usleep').msleep
     var serialport = require('serialport');
     var port = {};
     var wait_result = false;
@@ -7,28 +7,28 @@ var serialport_wait = function() {
     var msec_tick = 10, wait_elapsed = 0, connection_start = 0;
     var debug = 0;
 
-    this.list = this.listNames = function() {
-        var ports = this.listAll();
+    this.list = this.listNames = async function() {
+        var ports = await this.listAll();
         var names = ports.map(function(item) { return item.comName; });
         return names.sort();
     };
 
-    this.listAll = function() {
+    this.listAll = async function() {
         var done = false;
         var list = [];
-        serialport.list(function (err, ports) {
-            ports.forEach(function(port) {
-                list.push(port);
-            });
+        await serialport.list(function (err, ports) {
+          ports.forEach(function(port) {
+            list.push(port);
+          });
 
-            done = true;
+          done = true;
         });
 
-        while(!done) deasync.sleep(msec_tick);
+        while(!done) await sleep(msec_tick);
         return list;
     };
 
-    this.connect = function(comport, baudrate) {
+    this.connect = async function(comport, baudrate) {
         var done = false;
 
         connection_start = new Date();
@@ -49,22 +49,22 @@ var serialport_wait = function() {
             if (debug !== 0) console.log(error);
         });
 
-        while(!done) deasync.sleep(msec_tick);
+        while(!done) await sleep(msec_tick);
         return this;
     };
 
-    this.update = function(baudrate) {
+    this.update = async function(baudrate) {
         var done = false;
 
         port.update({ baudRate: baudrate }, function() {
             done = true;
         });
 
-        while(!done) deasync.sleep(msec_tick);
+        while(!done) await sleep(msec_tick);
         return this;
     };
 
-    this.close = function() {
+    this.close = async function() {
         var done = false;
 
         connection_start = 0;
@@ -74,11 +74,11 @@ var serialport_wait = function() {
             });
         }
 
-        while(!done) deasync.sleep(msec_tick);
+        while(!done) await sleep(msec_tick);
         return this;
     };
 
-    this.send = function(string) {
+    this.send = async function(string) {
         if (debug !== 0) console.log(string);
         var done = false;
         string = string || '';
@@ -89,16 +89,16 @@ var serialport_wait = function() {
             });
         });
 
-        while(!done) deasync.sleep(msec_tick);
+        while(!done) await sleep(msec_tick);
         return this;
     };
 
-    this.sendln = function(string) {
+    this.sendln = async function(string) {
         string = string || '';
         return this.send(string + '\n');
     };
 
-    this.wait = function(string, timeout) {
+    this.wait = async function(string, timeout) {
         var done = false;
         var ticks = 0, mtimeout;
         if (!string) return this;
@@ -122,21 +122,21 @@ var serialport_wait = function() {
             }
             wait_elapsed = ticks;
 
-            deasync.sleep(msec_tick);
+            await sleep(msec_tick);
         }
 
         return this;
     };
 
-    this.msleep = function(mtimeout) {
+    this.msleep = async function(mtimeout) {
         if (mtimeout && mtimeout > 0)
-            deasync.sleep(mtimeout);
+            await sleep(mtimeout);
         return this;
     };
 
-    this.sleep = function(timeout) {
+    this.sleep = async function(timeout) {
         if (timeout && timeout > 0)
-            deasync.sleep(timeout * 1000);
+            await sleep(timeout * 1000);
         return this;
     };
 
