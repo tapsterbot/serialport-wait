@@ -3,7 +3,7 @@
 var serialport-wait;
 serialport-wait += node.js;
 serialport-wait += serialport;
-serialport-wait += deasync;
+serialport-wait += usleep;
 serialport-wait += teraterm_script;
 ```
 
